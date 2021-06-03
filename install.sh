@@ -26,6 +26,10 @@ fi
 #     Type of rke2 service. Can be either "server" or "agent".
 #     Default is "server".
 #
+#   - INSTALL_RKE2_EXEC
+#     This is an alias for INSTALL_RKE2_TYPE, included for compatibility with K3s.
+#     If both are set, INSTALL_RKE2_TYPE is preferred.
+#
 #   - INSTALL_RKE2_VERSION
 #     Version of rke2 to download from github.
 #
@@ -75,12 +79,12 @@ fatal() {
 
 # check_target_mountpoint return success if the target directory is on a dedicated mount point
 check_target_mountpoint() {
-    mountpoint -q ${INSTALL_RKE2_TAR_PREFIX}
+    mountpoint -q "${INSTALL_RKE2_TAR_PREFIX}"
 }
 
 # check_target_ro returns success if the target directory is read-only
 check_target_ro() {
-    touch ${INSTALL_RKE2_TAR_PREFIX}/.rke2-ro-test && rm -rf ${INSTALL_RKE2_TAR_PREFIX}/.rke2-ro-test
+    touch "${INSTALL_RKE2_TAR_PREFIX}"/.rke2-ro-test && rm -rf "${INSTALL_RKE2_TAR_PREFIX}"/.rke2-ro-test
     test $? -ne 0
 }
 
@@ -102,7 +106,7 @@ setup_env() {
 
     # --- make sure install type has a value
     if [ -z "${INSTALL_RKE2_TYPE}" ]; then
-        INSTALL_RKE2_TYPE="server"
+        INSTALL_RKE2_TYPE="${INSTALL_RKE2_EXEC:-server}"
     fi
 
     # --- use yum install method if available by default
@@ -204,10 +208,10 @@ get_release_version() {
         version_url="${INSTALL_RKE2_CHANNEL_URL}/${INSTALL_RKE2_CHANNEL}"
         case ${DOWNLOADER} in
         *curl)
-            version=$(${DOWNLOADER} -w "%{url_effective}" -L -s -S ${version_url} -o /dev/null | sed -e 's|.*/||')
+            version=$(${DOWNLOADER} -w "%{url_effective}" -L -s -S "${version_url}" -o /dev/null | sed -e 's|.*/||')
             ;;
         *wget)
-            version=$(${DOWNLOADER} -SqO /dev/null ${version_url} 2>&1 | grep -i Location | sed -e 's|.*/||')
+            version=$(${DOWNLOADER} -SqO /dev/null "${version_url}" 2>&1 | grep -i Location | sed -e 's|.*/||')
             ;;
         *)
             fatal "Unsupported downloader executable '${DOWNLOADER}'"
@@ -323,7 +327,7 @@ verify_tarball() {
 unpack_tarball() {
     info "unpacking tarball file to ${INSTALL_RKE2_TAR_PREFIX}"
     mkdir -p ${INSTALL_RKE2_TAR_PREFIX}
-    tar xzf $TMP_TARBALL -C ${INSTALL_RKE2_TAR_PREFIX}
+    tar xzf "${TMP_TARBALL}" -C "${INSTALL_RKE2_TAR_PREFIX}"
     if [ "${INSTALL_RKE2_TAR_PREFIX}" != "${DEFAULT_TAR_PREFIX}" ]; then
         info "updating tarball contents to reflect install path"
         sed -i "s|${DEFAULT_TAR_PREFIX}|${INSTALL_RKE2_TAR_PREFIX}|" ${INSTALL_RKE2_TAR_PREFIX}/lib/systemd/system/rke2-*.service ${INSTALL_RKE2_TAR_PREFIX}/bin/rke2-uninstall.sh
@@ -384,7 +388,7 @@ install_airgap_tarball() {
     mkdir -p "${INSTALL_RKE2_AGENT_IMAGES_DIR}"
     # releases that provide zst artifacts can read from the compressed archive; older releases
     # that produce only gzip artifacts need to have the tarball decompressed ahead of time
-    if grep -qF '.tar.zst' ${TMP_AIRGAP_CHECKSUMS} || [ "${AIRGAP_TARBALL_FORMAT}" = "zst" ]; then
+    if grep -qF '.tar.zst' "${TMP_AIRGAP_CHECKSUMS}" || [ "${AIRGAP_TARBALL_FORMAT}" = "zst" ]; then
         info "installing airgap tarball to ${INSTALL_RKE2_AGENT_IMAGES_DIR}"
         mv -f "${TMP_AIRGAP_TARBALL}" "${INSTALL_RKE2_AGENT_IMAGES_DIR}/rke2-images.${SUFFIX}.tar.zst"
     else
@@ -446,7 +450,7 @@ enabled=1
 gpgcheck=1
 gpgkey=https://${rpm_site}/public.key
 EOF
-    if [ -z ${INSTALL_RKE2_VERSION} ]; then
+    if [ -z "${INSTALL_RKE2_VERSION}" ]; then
         yum -y install "rke2-${INSTALL_RKE2_TYPE}"
     else
         rke2_rpm_version=$(echo "${INSTALL_RKE2_VERSION}" | sed -E -e "s/[\+-]/~/g" | sed -E -e "s/v(.*)/\1/")

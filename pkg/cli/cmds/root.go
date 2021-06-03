@@ -23,12 +23,6 @@ var (
 	appName    = filepath.Base(os.Args[0])
 	commonFlag = []cli.Flag{
 		&cli.StringFlag{
-			Name:        "system-default-registry",
-			Usage:       "(image) Private registry to be used for all system Docker images",
-			EnvVar:      "RKE2_SYSTEM_DEFAULT_REGISTRY",
-			Destination: &config.Images.SystemDefaultRegistry,
-		},
-		&cli.StringFlag{
 			Name:        images.KubeAPIServer,
 			Usage:       "(image) Override image to use for kube-apiserver",
 			EnvVar:      "RKE2_KUBE_APISERVER_IMAGE",
@@ -191,10 +185,10 @@ func setCISFlags(clx *cli.Context) error {
 	return clx.Set(pkdFlagName, "true")
 }
 
-func validateProfile(clx *cli.Context) {
+func validateProfile(clx *cli.Context, nodeType string) {
 	switch clx.String("profile") {
 	case rke2.CISProfile15, rke2.CISProfile16:
-		if err := validateCISReqs("server"); err != nil {
+		if err := validateCISReqs(nodeType); err != nil {
 			logrus.Fatal(err)
 		}
 		if err := setCISFlags(clx); err != nil {
