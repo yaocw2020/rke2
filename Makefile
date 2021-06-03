@@ -47,6 +47,10 @@ build-image-kubernetes:                   ## Build the kubernetes image
 build-image-runtime:                      ## Build the runtime image
 	./scripts/build-image-runtime
 
+.PHONY: build-image-windows-runtime
+build-image-windows-runtime:                      ## Build the windows runtime image
+	./scripts/build-image-windows-runtime
+
 .PHONY: publish-image-kubernetes
 publish-image-kubernetes: build-image-kubernetes
 	./scripts/publish-image-kubernetes
@@ -54,6 +58,10 @@ publish-image-kubernetes: build-image-kubernetes
 .PHONY: publish-image-runtime
 publish-image-runtime: build-image-runtime
 	./scripts/publish-image-runtime
+
+.PHONY: publish-image-windows-runtime
+publish-image-windows-runtime: build-image-windows-runtime
+	./scripts/publish-image-windows-runtime
 
 .PHONY: validate
 validate:                                ## Run go fmt/vet
@@ -102,6 +110,10 @@ dev-peer-enter:                         ## Enter the peer shell on another termi
 .PHONY: publish-manifest-runtime
 publish-manifest-runtime: build-image-runtime					## Create and push the rke2-runtime manifest
 	./scripts/publish-manifest-runtime
+
+.PHONY: publish-manifest-windows-runtime
+publish-manifest-windows-runtime: build-image-windows-runtime					## Create and push the rke2-windows-runtime manifest
+	./scripts/publish-manifest-windows-runtime
 
 .PHONY: publish-manifest-kubernetes
 publish-manifest-kubernetes: build-image-kubernetes						## Create and push the kubernetes manifest

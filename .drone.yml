@@ -108,6 +108,28 @@ steps:
     - refs/head/master
     - refs/tags/*
 
+- name: publish-image-windows-runtime
+  image: rancher/windows-runtime-base:v1.0
+  commands:
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - DRONE_TAG=${DRONE_TAG} make publish-image-windows-runtime
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  volumes:
+    - name: docker
+      path: /var/run/docker.sock
+  when:
+    event:
+      - tag
+    instance:
+      - drone-publish.rancher.io
+    ref:
+      - refs/head/master
+      - refs/tags/*
+
 volumes:
 - name: docker
   host:

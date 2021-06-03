@@ -7,9 +7,11 @@ source ./scripts/version.sh
 
 ./scripts/build-image-kubernetes
 ./scripts/build-image-runtime
+./scripts/build-image-windows-runtime
 
 awk '{print $1}' << EOF > build/images-core.txt
     ${REGISTRY}/${REPO}/${PROG}-runtime:${DOCKERIZED_VERSION}
+    ${REGISTRY}/${REPO}/${PROG}-windows-runtime:${DOCKERIZED_VERSION}
     ${REGISTRY}/${REPO}/hardened-kubernetes:${DOCKERIZED_VERSION}
 EOF
 

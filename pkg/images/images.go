@@ -14,6 +14,7 @@ import (
 
 const (
 	Runtime               = "runtime-image"
+	WindowsRuntime        = "windows-runtime-image"
 	KubeAPIServer         = "kube-apiserver-image"
 	KubeControllerManager = "kube-controller-manager-image"
 	KubeScheduler         = "kube-scheduler-image"
@@ -23,11 +24,12 @@ const (
 
 // These defaults are overridden at build time and do not need to be updated here
 var (
-	DefaultRegistry        = name.DefaultRegistry
-	DefaultEtcdImage       = "rancher/hardened-etcd"
-	DefaultKubernetesImage = "rancher/hardened-kubernetes"
-	DefaultPauseImage      = "rancher/pause"
-	DefaultRuntimeImage    = "rancher/rke2-runtime"
+	DefaultRegistry            = name.DefaultRegistry
+	DefaultEtcdImage           = "rancher/hardened-etcd"
+	DefaultKubernetesImage     = "rancher/hardened-kubernetes"
+	DefaultPauseImage          = "rancher/pause"
+	DefaultRuntimeImage        = "rancher/rke2-runtime"
+	DefaultWindowsRuntimeImage = "rancher/rke2-windows-runtime"
 )
 
 // ResolverOpt is an option to modify image resolution behavior.
@@ -47,6 +49,7 @@ type ImageOverrideConfig struct {
 	KubeScheduler         string
 	Pause                 string
 	Runtime               string
+	WindowsRuntime        string
 	ETCD                  string
 }
 
@@ -73,6 +76,8 @@ func NewResolver(c ImageOverrideConfig) (*Resolver, error) {
 		{KubeScheduler, c.KubeScheduler},
 		{Pause, c.Pause},
 		{Runtime, c.Runtime},
+		{WindowsRuntime, c.WindowsRuntime},
+
 	}
 	for _, s := range config {
 		if err := r.ParseAndSetOverride(s.i, s.n); err != nil {
@@ -195,6 +200,8 @@ func getDefaultImage(i string) (name.Reference, error) {
 		s = DefaultEtcdImage
 	case Runtime:
 		s = DefaultRuntimeImage
+	case WindowsRuntime:
+		s = DefaultWindowsRuntimeImage
 	case Pause:
 		s = DefaultPauseImage
 	case KubeAPIServer, KubeControllerManager, KubeScheduler:

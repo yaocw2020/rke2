@@ -59,6 +59,12 @@ var (
 			Destination: &config.Images.Runtime,
 		},
 		&cli.StringFlag{
+			Name:        images.WindowsRuntime,
+			Usage:       "(image) Override image to use for Windows runtime binaries (containerd, kubectl, crictl, etc)",
+			EnvVar:      "RKE2_WINDOWS_RUNTIME_IMAGE",
+			Destination: &config.Images.WindowsRuntime,
+		},
+		&cli.StringFlag{
 			Name:        images.ETCD,
 			Usage:       "(image) Override image to use for etcd",
 			EnvVar:      "RKE2_ETCD_IMAGE",
