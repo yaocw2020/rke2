@@ -41,6 +41,7 @@ OPTIONS:
    --kube-scheduler-image value           (image) Override image to use for kube-scheduler [$RKE2_KUBE_SCHEDULER_IMAGE]
    --pause-image value                    (image) Override image to use for pause [$RKE2_PAUSE_IMAGE]
    --runtime-image value                  (image) Override image to use for runtime binaries (containerd, kubectl, crictl, etc) [$RKE2_RUNTIME_IMAGE]
+   --windows-runtime-image value          (image) Override image to use for Windows runtime binaries (containerd, kubectl, crictl, etc) [$RKE2_WINDOWS_RUNTIME_IMAGE]
    --etcd-image value                     (image) Override image to use for etcd [$RKE2_ETCD_IMAGE]
    --kubelet-path value                   (experimental/agent) Override kubelet binary path [$RKE2_KUBELET_PATH]
    --cloud-provider-name value            (cloud provider) Cloud provider name [$RKE2_CLOUD_PROVIDER_NAME]
