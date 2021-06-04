@@ -109,7 +109,7 @@ steps:
     - refs/tags/*
 
 - name: publish-image-windows-runtime
-  image: rancher/windows-runtime-base:v1.0
+  image: rancher/windows-runtime-base:alpha
   commands:
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - DRONE_TAG=${DRONE_TAG} make publish-image-windows-runtime
