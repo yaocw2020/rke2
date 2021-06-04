@@ -100,6 +100,7 @@ func setup(clx *cli.Context, cfg Config) error {
 		return err
 	}
 
+	// RK - broke after re-base
 	//if err := defaults.Set(clx, pauseImage, dataDir); err != nil {
 	//	return err
 	//}
@@ -109,12 +110,13 @@ func setup(clx *cli.Context, cfg Config) error {
 	if cfg.Images.SystemDefaultRegistry != "" {
 		clx.Set("airgap-extra-registry", cfg.Images.SystemDefaultRegistry)
 	}
-
+	// RK - broke after re-base
 	//execPath, err := bootstrap.Stage(clx,resolver)
 	if err != nil {
 		return err
 	}
 
+	// RK - broke after re-base
 	//if err := os.Setenv("PATH", execPath+":"+os.Getenv("PATH")); err != nil {
 	//	return err
 	//}
