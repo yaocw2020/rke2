@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rancher/k3s/pkg/agent/config"
 	containerdk3s "github.com/rancher/k3s/pkg/agent/containerd"
 	"github.com/rancher/rke2/pkg/controllers/cisnetworkpolicy"
 	"github.com/sirupsen/logrus"
-	"github.com/rancher/k3s/pkg/agent/config"
 
 	"github.com/rancher/k3s/pkg/cli/agent"
 	"github.com/rancher/k3s/pkg/cli/cmds"
@@ -25,8 +25,6 @@ import (
 	"github.com/rancher/k3s/pkg/daemons/executor"
 	"github.com/rancher/k3s/pkg/etcd"
 	rawServer "github.com/rancher/k3s/pkg/server"
-	"github.com/rancher/rke2/pkg/bootstrap"
-	"github.com/rancher/rke2/pkg/cli/defaults"
 	"github.com/rancher/rke2/pkg/images"
 	"github.com/rancher/rke2/pkg/podexecutor"
 	"github.com/urfave/cli"
@@ -97,14 +95,14 @@ func setup(clx *cli.Context, cfg Config) error {
 		return err
 	}
 
-	pauseImage, err := resolver.GetReference(images.Pause)
+	//pauseImage, err := resolver.GetReference(images.Pause)
 	if err != nil {
 		return err
 	}
 
-	if err := defaults.Set(clx, pauseImage, dataDir); err != nil {
-		return err
-	}
+	//if err := defaults.Set(clx, pauseImage, dataDir); err != nil {
+	//	return err
+	//}
 
 	// If system-default-registry is set, add the same value to airgap-extra-registry so that images
 	// imported from tarballs are tagged to appear to come from the same registry.
@@ -112,14 +110,14 @@ func setup(clx *cli.Context, cfg Config) error {
 		clx.Set("airgap-extra-registry", cfg.Images.SystemDefaultRegistry)
 	}
 
-	execPath, err := bootstrap.Stage(clx, resolver)
+	//execPath, err := bootstrap.Stage(clx,resolver)
 	if err != nil {
 		return err
 	}
 
-	if err := os.Setenv("PATH", execPath+":"+os.Getenv("PATH")); err != nil {
-		return err
-	}
+	//if err := os.Setenv("PATH", execPath+":"+os.Getenv("PATH")); err != nil {
+	//	return err
+	//}
 
 	agentManifestsDir := filepath.Join(dataDir, "agent", config.DefaultPodManifestPath)
 	agentImagesDir := filepath.Join(dataDir, "agent", "images")
