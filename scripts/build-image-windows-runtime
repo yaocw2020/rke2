@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 set -ex
 
-# shellcheck disable=SC2046
 cd $(dirname "$0")/..
 
 source ./scripts/version.sh
 
 DOCKER_BUILDKIT=${DOCKER_BUILDKIT:-1} docker image build \
     --build-arg TAG="${VERSION}" \
-    --build-arg KUBERNETES_VERSION="${KUBERNETES_VERSION}" \
+#    --build-arg KUBERNETES_VERSION="${KUBERNETES_VERSION}" \
+    --build-arg KUBERNETES_VERSION=v1.21.0 \
     --build-arg MAJOR="${VERSION_MAJOR}" \
     --build-arg MINOR="${VERSION_MINOR}" \
     --build-arg CACHEBUST="$(date +%s%N)" \
     --tag "${REPO}"/"${PROG}"-windows-runtime:"${DOCKERIZED_VERSION}" \
     --tag "${REPO}"/"${PROG}"-windows-runtime:"${DOCKERIZED_VERSION}"-"${GOARCH}" \
     --target windows-runtime \
-.
+    -f Dockerfile.windows \
+    .
 
 mkdir -p build/images
 docker image save \
