@@ -1,18 +1,11 @@
 FROM alpine AS build
 
-RUN set -x \
-    && apk --no-cache add \
-    bash \
+RUN apk --no-cache add \
     curl \
-    file \
-    unzip \
-    git \
-    libseccomp-dev \
-    rsync \
-    py-pip
+    unzip
 
 # Dapper/Drone/CI environment
-FROM build AS dapper
+FROM rancher/hardened-build-base:v1.16.4b7 AS dapper
 ENV DAPPER_ENV GODEBUG REPO TAG DRONE_TAG PAT_USERNAME PAT_TOKEN KUBERNETES_VERSION DOCKER_BUILDKIT DRONE_BUILD_EVENT IMAGE_NAME GCLOUD_AUTH ENABLE_REGISTRY
 ARG DAPPER_HOST_ARCH
 ENV ARCH $DAPPER_HOST_ARCH
@@ -31,7 +24,13 @@ RUN set -x \
     libarchive-tools \
     zstd \
     jq \
-    python2
+    python2 \
+    git \
+    libseccomp-dev \
+    rsync \
+    file \
+    bash \
+    py-pip
 WORKDIR /source
 # End Dapper stuff
 
