@@ -137,18 +137,18 @@ steps:
     - name: docker
       path: /var/run/docker.sock
 
-- name: test
-  image: rancher/dapper:v0.5.5
-  secrets: [ gcloud_auth ]
-  environment:
-    ENABLE_REGISTRY: 'true'
-    GCLOUD_AUTH:
-      from_secret: gcloud_auth
-  commands:
-    - dapper -f Dockerfile --target dapper make test
-  volumes:
-    - name: docker
-      path: /var/run/docker.sock
+#- name: test-windows
+#  image: rancher/dapper:v0.5.5
+#  secrets: [ gcloud_auth ]
+#  environment:
+#    ENABLE_REGISTRY: 'true'
+#    GCLOUD_AUTH:
+#      from_secret: gcloud_auth
+#  commands:
+#    - dapper -f Dockerfile.windows --target dapper make test
+#  volumes:
+#    - name: docker
+#      path: /var/run/docker.sock
 
 #- name: publish-image-windows-runtime
 #  image: rancher/windows-runtime-base:alpha
