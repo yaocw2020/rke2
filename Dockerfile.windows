@@ -95,4 +95,4 @@ RUN mv CalicoWindows/cni/calico.exe rancher/
 RUN mv CalicoWindows/cni/calico-ipam.exe rancher/
 
 FROM scratch AS windows-runtime
-COPY --from=windows-runtime-collect ./rancher/* /bin/
+COPY --from=windows-runtime-collect ./rancher/* /
