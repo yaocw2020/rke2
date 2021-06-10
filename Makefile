@@ -18,7 +18,7 @@ ci-shell: clean .dapper                  ## Launch a shell in the CI environment
 dapper-ci: .ci                           ## Used by Drone CI, does the same as "ci" but in a Drone way
 
 .PHONY: dapper-ci-windows
-dapper-ci: .ci-windows                           ## Used by Drone CI, does the same as "ci" but in a Drone way
+dapper-ci-windows: .ci-windows                           ## Used by Drone CI, does the same as "ci" but in a Drone way
 
 .ci: validate build package
 .ci-windows: validate build-windows package-windows
@@ -84,6 +84,10 @@ publish-image-runtime: build-image-runtime
 .PHONY: publish-image-windows-runtime
 publish-image-windows-runtime: build-image-windows-runtime
 	./scripts/publish-image-windows-runtime
+
+.PHONY: publish-windows
+publish-windows: build-windows-images
+	./scripts/publish-windows
 
 .PHONY: validate
 validate:                                ## Run go fmt/vet
