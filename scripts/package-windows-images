@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -ex
+
+cd $(dirname $0)/..
+
+source ./scripts/version.sh
+
+mkdir -p dist/artifacts
+
+for FILE in build/images*.txt; do
+    BASE=$(basename ${FILE} .txt)
+    TARFILE=build/images/${PROG}-${BASE}.tar
+    cp -f ${FILE} dist/artifacts/${PROG}-${BASE}.windows.txt
+    zstd -T0 -16 -f --long=25 --no-progress ${TARFILE} -o dist/artifacts/${PROG}-${BASE}.windows.tar.zst
+    gzip -v -c ${TARFILE} > dist/artifacts/${PROG}-${BASE}.windows.tar.gz
+done
+
+cat build/images*.txt | sort -V | uniq > dist/artifacts/${PROG}-images-all.windows.txt

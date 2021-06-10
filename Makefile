@@ -17,19 +17,37 @@ ci-shell: clean .dapper                  ## Launch a shell in the CI environment
 .PHONY: dapper-ci
 dapper-ci: .ci                           ## Used by Drone CI, does the same as "ci" but in a Drone way
 
+.PHONY: dapper-ci-windows
+dapper-ci: .ci-windows                           ## Used by Drone CI, does the same as "ci" but in a Drone way
+
 .ci: validate build package
+.ci-windows: validate build-windows package-windows
 
 .PHONY: build
 build:                                   ## Build using host go tools
 	./scripts/build
 
+.PHONY: build-windows
+build-windows:                                   ## Build only Windows using host go tools
+	./scripts/build-windows
+
+
 .PHONY: binary
 binary:                             	## Build only the binary using host go tools
 	./scripts/build-binary
 
+.PHONY: windows-binary
+windows-binary:                             	## Build only the binary using host go tools
+	./scripts/build-windows-binary
+
+
 .PHONY: build-debug
 build-debug:                             ## Debug build using host go tools
 	GODEBUG=y ./scripts/build-binary
+
+.PHONY: build-windows-debug
+build-windows-debug:                             ## Debug build using host go tools
+	GODEBUG=y ./scripts/build-windows-binary
 
 .PHONY: scan-images
 scan-images:
@@ -38,6 +56,10 @@ scan-images:
 .PHONY: build-images
 build-images:                             ## Build all images and image tarballs (including airgap)
 	./scripts/build-images
+
+.PHONY: build-windows-images
+build-windows-images:                             ## Build all windows images and image tarballs (including airgap)
+	./scripts/build-windows-images
 
 .PHONY: build-image-kubernetes
 build-image-kubernetes:                   ## Build the kubernetes image
@@ -126,6 +148,11 @@ dispatch:								## Send dispatch event to rke2-upgrade repo
 .PHONY: package
 package: build 						## Package the rke2 binary
 	./scripts/package
+
+.PHONY: package-windows
+package-windows: build-windows 						## Package the rke2 windows binary
+	./scripts/package-windows
+
 
 .PHONY: package-images
 package-images: build-images		## Package docker images for airgap environment

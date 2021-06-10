@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -ex
+
+cd $(dirname $0)/..
+
+source ./scripts/version.sh
+mkdir -p dist/{artifacts,bundle}
+./scripts/package-windows-binary
+./scripts/package-windows-bundle
+./scripts/package-windows-images
+./scripts/build-upload dist/artifacts/${RELEASE}.tar.gz dist/artifacts/${PROG}-images.windows.tar.zst ${COMMIT}

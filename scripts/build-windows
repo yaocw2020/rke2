@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -ex
+
+cd $(dirname $0)/..
+
+source ./scripts/version.sh
+mkdir -p build/images
+./scripts/build-windows-binary
+./scripts/build-windows-images
