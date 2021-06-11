@@ -90,7 +90,7 @@ RUN curl -sL https://github.com/Microsoft/SDN/raw/master/Kubernetes/windows/hns.
 
 RUN tar xzvf crictl-${KUBERNETES_VERSION}-windows-amd64.tar.gz crictl.exe -C rancher/
 RUN tar xvzf containerd-${CONTAINERD_VERSION}-windows-amd64.tar.gz -C rancher/
-RUN tar xzvf cni-plugins-windows-amd64-${CNI_PLUGIN_VERSION}.tgz ./flannel.exe ./win-overlay.exe -C rancher/
+RUN tar xzvf cni-plugins-windows-amd64-${CNI_PLUGIN_VERSION}.tgz ./flannel.exe ./win-overlay.exe ./host-local.exe -C rancher/
 RUN tar xzvf flannel-${FLANNEL_VERSION}-windows-amd64.tar.gz flanneld.exe -C rancher/
 
 RUN unzip calico-windows-${CALICO_VERSION}.zip
@@ -99,4 +99,4 @@ RUN mv CalicoWindows/cni/calico.exe rancher/
 RUN mv CalicoWindows/cni/calico-ipam.exe rancher/
 
 FROM scratch AS windows-runtime
-COPY --from=windows-runtime-collect ./rancher/* /
+COPY --from=windows-runtime-collect ./rancher/* /bin/
