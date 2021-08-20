@@ -27,9 +27,9 @@ build:                                   ## Build using host go tools
 build-binary:                             	## Build only the Linux binary using host go tools
 	./scripts/build-binary
 
-.PHONY: build-windows-binary
-build-windows-binary:                       ## Build only the Windows binary using host go tools
-	./scripts/build-windows-binary
+#.PHONY: build-windows-binary
+#build-windows-binary:                       ## Build only the Windows binary using host go tools
+#	./scripts/build-windows-binary
 
 .PHONY: build-debug
 build-debug:                             ## Debug build using host go tools

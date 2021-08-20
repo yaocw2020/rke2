@@ -6,6 +6,9 @@ set -eux -o pipefail
 : "${CHART_NAME:="$(basename "${CHART_FILE%%.yaml}")"}"
 : "${CHART_PACKAGE:="${CHART_NAME%%-crd}"}"
 : "${CHART_URL:="${CHART_REPO:="https://rke2-charts.rancher.io"}/assets/${CHART_PACKAGE}/${CHART_NAME}-${CHART_VERSION:="v0.0.0"}.tgz"}"
+
+${CHART_DEBUG:=false} && CHART_URL="http://172.16.4.20/rke2/${CHART_NAME}-${CHART_VERSION:="v0.0.0"}.tgz"
+
 curl -fsSL "${CHART_URL}" -o "${CHART_TMP:=$(mktemp)}"
 cat <<-EOF > "${CHART_FILE}"
 apiVersion: helm.cattle.io/v1
